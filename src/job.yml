@@ -1,0 +1,13 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
+code: src
+command: python train.py --data ${{inputs.training_data}}
+environment: azureml:Mi_docker-Img:2
+compute: azureml:cpu-cluster 
+
+inputs:
+  training_data:
+    type: mltable # o uri_file si es un archivo CSV
+    path: azureml:diabetes-dataset:1
+
+display_name: diabetes-python-v1
+experiment_name: diabetes-experiment
