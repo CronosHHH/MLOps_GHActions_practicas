@@ -14,21 +14,19 @@ jobs:
     # 1. Descargar los archivos del repositorio (necesario para encontrar la carpeta src/)
     - name: Check out repository
       uses: actions/checkout@v4
+    
+    # lo suyo seria iniciar sesion con uses: azure/cli@v2
+    # pero por temas de permisos, vamos a iniciar sesión manualmente con az login y usuario/contraseña
+    
+    - name: Azure Manual Login
+      env:
+        AZURE_USERNAME: ${{ secrets.AZURE_USERNAME }}
+        AZURE_PASSWORD: ${{ secrets.AZURE_PASSWORD }}
+      run: |
+        az login -u "$AZURE_USERNAME" -p "$AZURE_PASSWORD" --allow-no-subscriptions
+        az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        az account show
 
-    # 2. Iniciar sesión en Azure usando tus secretos
-    - name: Log in to Azure
-      uses: azure/login@v2
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        
-    - name: Azure CLI script
-      uses: azure/cli@v2
-      with:
-        azcliversion: latest
-        inlineScript: |
-          az account show
     # 3. Instalar la extensión de Azure ML y lanzar el Job apuntando a tus recursos
     - name: Trigger Azure Machine Learning job
       run: |
