@@ -35,6 +35,8 @@ AZURE_SUBSCRIPTION_ID
 AZURE_RESOURCE_GROUP
 AZURE_WORKSPACE_NAME
 
+añadimos AZURE_CLIENT_SECRET si usamos un Service Principal (SP) en lugar de una Managed Identity.
+
 para encontrar el workspace selecciona el recurso (resource group) y busca el nombre del workspace que busques, en mi caso "ml-project-demo".
 
 
