@@ -11,26 +11,23 @@ jobs:
   train-model:
     runs-on: ubuntu-latest
     steps:
-    # 1. Descargar los archivos del repositorio (necesario para encontrar la carpeta src/)
-    - name: Check out repository
-      uses: actions/checkout@v4
-    
-    # lo suyo seria iniciar sesion con uses: azure/cli@v2
-    # pero por temas de permisos, vamos a iniciar sesión manualmente con az login y usuario/contraseña
-    
-    - name: Azure Manual Login
-      env:
-        AZURE_USERNAME: ${{ secrets.AZURE_USERNAME }}
-        AZURE_PASSWORD: ${{ secrets.AZURE_PASSWORD }}
-      run: |
-        az login -u "$AZURE_USERNAME" -p "$AZURE_PASSWORD" --allow-no-subscriptions
-        az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        az account show
+      # 1. Descargar los archivos del repositorio (necesario para encontrar la carpeta src/)
+      - name: Check out repository
+        uses: actions/checkout@v4
 
-    # 3. Instalar la extensión de Azure ML y lanzar el Job apuntando a tus recursos
-    - name: Trigger Azure Machine Learning job
-      run: |
-        az extension add -n ml -y
-        az ml job create --file src/job.yml \
-          --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-          --workspace-name ${{ secrets.AZURE_WORKSPACE_NAME }}
+      # 2. Iniciar sesión en Azure con Service Principal
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}  # Añadido para Service Principal
+
+      # 3. Instalar la extensión de Azure ML y lanzar el Job apuntando a tus recursos
+      - name: Trigger Azure Machine Learning job
+        run: |
+          az extension add -n ml -y
+          az ml job create --file src/job.yml \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --workspace-name ${{ secrets.AZURE_WORKSPACE_NAME }}
