@@ -28,5 +28,5 @@ jobs:
       # 3. Comprobación rápida para verificar que estás dentro de tu Workspace
       - name: Probar conexión a Azure ML
         run: |
-          az extension add -n ml -y
+          az extension add -name ml -y
           az ml workspace show --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --workspace-name ${{ secrets.AZURE_WORKSPACE_NAME }}
