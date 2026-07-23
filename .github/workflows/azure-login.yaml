@@ -3,21 +3,21 @@ name: Conexión Automática a Azure ML
 on:
   push:
     branches:
-      - prod  # Cambia esto por el nombre de tu rama si no estás usando main
+      - prod
 
 permissions:
-  id-token: write  # OBLIGATORIO: Permite usar las credenciales federadas (OIDC) sin contraseñas
-  contents: read   # Permite a GitHub leer los archivos del repositorio
+  id-token: write  # Permite usar credenciales federadas (OIDC)
+  contents: read   # Permite leer los archivos del repositorio
 
 jobs:
   conectar-azure:
     runs-on: ubuntu-latest
     steps:
-      # 1. Descarga el código del repositorio en la máquina virtual
+      # 1. Descarga el código del repositorio
       - name: Descargar repositorio
         uses: actions/checkout@v4
 
-      # 2. Inicia sesión en Azure usando tus 3 llaves de autenticación
+      # 2. Inicia sesión en Azure con OIDC
       - name: Iniciar Sesión en Azure
         uses: azure/login@v2
         with:
@@ -25,10 +25,8 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      # 3. Comprobación rápida para verificar que estás dentro de tu Workspace
+      # 3. Comprobación de conexión al Workspace
       - name: Probar conexión a Azure ML
         run: |
           az extension add --name ml -y
-          az ml workspace show --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --workspace-name ${{ secrets.AZURE_WORKSPACE_NAME }}          git add .
-          git commit -m "Fix: change -n to --name for az extension add"
-          git push origin prod
+          az ml workspace show --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AZURE_WORKSPACE_NAME }}
