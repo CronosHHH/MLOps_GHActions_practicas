@@ -6,7 +6,7 @@ type: automl
 
 task: classification
 primary_metric: accuracy
-target_column_name: target
+target_column_name: Diabetic
 
 training_data:
   type: mltable
