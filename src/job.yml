@@ -1,7 +1,8 @@
 $schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
 code: .
 command: python train.py --data ${{inputs.training_data}}
-environment: azureml:Mi_docker-Img:1
+environment: azureml:AzureML-sklearn-1.0:latest
+#environment: azureml:Mi_docker-Img:1
 compute: azureml:cpu-cluster 
 
 inputs:
