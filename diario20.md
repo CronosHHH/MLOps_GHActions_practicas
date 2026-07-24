@@ -40,4 +40,28 @@ para encontrar el workspace selecciona el recurso (resource group) y busca el no
 
 Creamos 5 secretos en GitHub para almacenar estas credenciales de forma segura.
 
+---
+
+Workflow con pull request (PR):
+
+Creas Rama para trabajar en ella:
+```bash
+# Te aseguras de estar actualizado y creas una nueva rama
+git checkout main
+git pull
+git checkout -b feature/nuevo-job-azure
+
+# Haces cambios en tu código y creas un commit
+git add src/job.yml
+git commit -m "feat: añade configuración de entrenamiento para Azure ML"
+
+# Subes la rama a GitHub
+git push origin feature/nuevo-job-azure
+```
+
+Entras a la web de tu repositorio en GitHub y verás un botón amarillo que dice "Compare & pull request".
+Al pulsar en él, configuras la petición:
+- Base (Destino): "main" o la rama que quieras que reciba los cambios, en mi caso "prod"
+- Compare (Origen): feature/nuevo-job-azure
+- Título y descripción: ...
 

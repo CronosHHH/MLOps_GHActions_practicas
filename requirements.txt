@@ -1,4 +1,8 @@
-azure-ai-ml
-azure-identity
-mlflow
-ipykernel
+azure-ai-ml>=1.12.0,<2.0.0
+azure-identity>=1.15.0,<2.0.0
+mlflow==2.8.1
+scikit-learn>=1.5.0
+pandas>=2.0.3
+numpy>=1.24.3
+mltable>=1.6.0
+azureml-mlflow

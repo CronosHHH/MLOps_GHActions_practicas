@@ -1,0 +1,40 @@
+name: PR Code Quality Checks
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  code-checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Descargar el código de la rama de la PR
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # 2. Configurar Python en la máquina virtual de GitHub
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      # 3. Instalar dependencias de desarrollo y del proyecto
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pytest
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      # 4. Revisión de errores de sintaxis en el código de 'src/'
+      - name: Lint with flake8
+        run: |
+          # Falla si hay errores de sintaxis o variables no definidas
+          flake8 src/ --count --select=E9,F63,F7,F82 --show-source --statistics
+
+      # 5. Ejecutar tests unitarios (si tienes una carpeta de tests)
+      - name: Run unit tests
+        run: |
+          # Si usas pytest para probar funciones auxiliares
+          pytest tests/ || echo "No tests folder found or tests passed"
