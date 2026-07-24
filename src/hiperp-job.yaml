@@ -1,15 +1,12 @@
 $schema: https://azuremlschemas.azureedge.net/latest/sweepJob.schema.json
 type: sweep
 
-# 1. Definir el objetivo a optimizar
 objective:
   primary_metric: mean_squared_error
   goal: minimize
 
-# 2. Método de muestreo
 sampling_algorithm: random
 
-# 3. Espacio de búsqueda de hiperparámetros
 search_space:
   n_estimators:
     type: choice
@@ -18,24 +15,22 @@ search_space:
     type: choice
     values: [3, 5, 8, 10, 15]
 
-# 4. Límites de ejecución y política de terminación
 limits:
   max_total_trials: 12
   max_concurrent_trials: 2
-
-timeout_minutes: 30          # ← Movido fuera de limits, a nivel raíz
+  timeout: 30                     # ← Cambiado de timeout_minutes a timeout
 
 early_termination:
   type: bandit
   slack_factor: 0.1
   evaluation_interval: 1
 
-# 5. Plantilla del comando a ejecutar
 trial:
   code: .
   command: python train.py --data ${{inputs.training_data}} --n_estimators ${{search_space.n_estimators}} --max_depth ${{search_space.max_depth}}
   environment: azureml:Mi_docker-Img:4
-  compute: azureml:cpu-cluster       # ← compute aquí dentro está bien
+
+compute: azureml:cpu-cluster       # ← MOVIDO fuera de trial, a nivel raíz
 
 inputs:
   training_data:
