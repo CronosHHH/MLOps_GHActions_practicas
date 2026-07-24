@@ -3,7 +3,7 @@ type: sweep
 
 # 1. Definir el objetivo a optimizar
 objective:
-  primary_metric: mean_squared_error # alternativa: accuracy, f1_score, etc.
+  primary_metric: mean_squared_error
   goal: minimize
 
 # 2. Método de muestreo
@@ -22,7 +22,8 @@ search_space:
 limits:
   max_total_trials: 12
   max_concurrent_trials: 2
-  timeout_minutes: 30
+
+timeout_minutes: 30          # ← Movido fuera de limits, a nivel raíz
 
 early_termination:
   type: bandit
@@ -34,7 +35,7 @@ trial:
   code: .
   command: python train.py --data ${{inputs.training_data}} --n_estimators ${{search_space.n_estimators}} --max_depth ${{search_space.max_depth}}
   environment: azureml:Mi_docker-Img:4
-  compute: azureml:cpu-cluster
+  compute: azureml:cpu-cluster       # ← compute aquí dentro está bien
 
 inputs:
   training_data:
