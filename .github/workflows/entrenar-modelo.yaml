@@ -27,7 +27,7 @@ jobs:
       - name: Trigger Azure Machine Learning job
         run: |
           az extension add --name ml -y
-          az ml job create --file src/job.yml \
+          az ml job create --file src/job.yaml \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
             --workspace ${{ secrets.AZURE_WORKSPACE_NAME }}
             
