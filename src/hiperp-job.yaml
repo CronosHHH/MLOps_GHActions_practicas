@@ -18,8 +18,7 @@ search_space:
 limits:
   max_total_trials: 12
   max_concurrent_trials: 2
-  max_duration: 30
-
+  
 early_termination:
   type: bandit
   slack_factor: 0.1
