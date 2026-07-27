@@ -1,0 +1,23 @@
+# No requiere de python ni de librerías adicionales, ya que es un Job de AutoML. 
+# Solo se necesita el dataset y la configuración del Job.
+
+$schema: https://azuremlschemas.azureedge.net/latest/automlJob.schema.json
+type: automl
+
+task: classification
+primary_metric: accuracy
+target_column_name: Diabetic
+
+training_data:
+  type: mltable
+  path: azureml:diabetes-dataset:1
+
+compute: azureml:cpu-cluster
+experiment_name: diabetes-automl_future_pipeline
+display_name: diabetes-automl-v1
+
+limits:
+  timeout_minutes: 60
+  trial_timeout_minutes: 20
+  max_trials: 5
+  enable_early_termination: true

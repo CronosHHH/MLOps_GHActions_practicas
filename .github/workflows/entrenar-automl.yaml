@@ -1,0 +1,33 @@
+name: Manually trigger an Azure Machine Learning job
+
+on:
+  workflow_dispatch: # Permite la ejecución manual desde la interfaz de GitHub
+
+permissions:
+  id-token: write  # Permite usar credenciales federadas (OIDC)
+  contents: read   # Permite leer los archivos del repositorio
+
+jobs:
+  train-model:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Descargar los archivos del repositorio
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # 2. Iniciar sesión en Azure con OIDC
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # 3. Instalar la extensión de Azure ML y lanzar el Job
+      - name: Trigger Azure Machine Learning job
+        run: |
+          az extension add --name ml -y
+          az ml job create --file src/automl-job.yaml \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --workspace ${{ secrets.AZURE_WORKSPACE_NAME }}
+            
