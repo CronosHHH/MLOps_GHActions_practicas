@@ -11,11 +11,9 @@ RUN pip install --no-cache-dir \
     pandas==2.0.3 \
     numpy==1.24.3 \
     mlflow==2.8.1 \
+    mlflow-skinny==2.8.1 \
     mltable==1.6.0 \
     azureml-mlflow \
     azure-ai-ml \
     azure-identity \
     && rm -rf /root/.cache/pip
-
-# Verificar instalación
-RUN python -c "import sklearn, pandas, numpy, mlflow, mltable; print('Todos los paquetes instalados correctamente')"

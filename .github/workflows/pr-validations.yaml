@@ -1,4 +1,4 @@
-name: PR Code Quality Checks
+name: Errores de sintaxis y tests unitarios en PRs
 
 on:
   pull_request:
